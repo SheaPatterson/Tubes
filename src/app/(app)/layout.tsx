@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/sidebar"
 
 const navItems = [
-  { label: "Signal Chain", href: "/", icon: Guitar },
+  { label: "Signal Chain", href: "/rig", icon: Guitar },
   { label: "Live", href: "/live", icon: Radio },
   { label: "Presets", href: "/presets", icon: Save },
   { label: "Settings", href: "/settings", icon: Settings },

@@ -295,7 +295,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Wire to Convex for cross-device sync and IndexedDB for offline support
     - _Requirements: 13.1, 13.2, 13.3, 13.4, 13.5, 13.6_
 
-  - [-] 11.5 Create Settings pages
+  - [x] 11.5 Create Settings pages
     - Create `src/app/(app)/settings/page.tsx` with sections: I/O Interface Options, MIDI Options, Recording Options, AI Settings, CPU & GPU Settings, Subscriptions, Payment
     - I/O: audio interface selection, input/output channels, buffer size
     - MIDI: device selection, mapping list with edit/delete, quick-map trigger
@@ -307,7 +307,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Persist changes immediately; audio engine restart only for buffer size changes
     - _Requirements: 9.3, 9.7, 10.1, 10.3, 11.6, 16.1, 16.2, 16.3, 16.4, 16.5, 16.6_
 
-  - [~] 11.6 Create User Profile and Authentication pages
+  - [x] 11.6 Create User Profile and Authentication pages
     - Create `src/app/(auth)/login/page.tsx` and `src/app/(auth)/signup/page.tsx` with email/password auth
     - Create `src/app/(app)/profile/page.tsx` for viewing/editing profile info
     - Implement password reset flow via email verification (30-min link validity)
@@ -315,7 +315,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6_
 
 - [ ] 12. Implement marketing and public pages
-  - [~] 12.1 Create public page layout and landing page
+  - [-] 12.1 Create public page layout and landing page
     - Create `src/app/(public)/layout.tsx` with public navigation
     - Create `src/app/(public)/page.tsx` (Landing) with interactive amp/pedal/cabinet mockups
     - _Requirements: 18.1, 18.2_
