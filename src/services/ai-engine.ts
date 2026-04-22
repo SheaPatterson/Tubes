@@ -5,8 +5,15 @@
  * Processes DSP output through a cloud neural network for Next Gen tier
  * tonal enhancement. Falls back to DSP-only on error/disconnect.
  *
- * Requirements: 2.5, 2.6, 9.1, 9.2, 9.4, 9.6, 9.7
+ * Audio is only transmitted when the user holds a Next Gen tier subscription
+ * AND has explicitly granted AI processing consent. Transmission ceases
+ * immediately upon consent revocation.
+ *
+ * Requirements: 2.5, 2.6, 9.1, 9.2, 9.4, 9.6, 9.7, 22.5, 22.6
  */
+
+import type { SubscriptionTier } from '@/types/user';
+import { canTransmitAudioToAI, type AIConsentState } from '@/lib/security';
 
 // ── Types ──
 
@@ -42,6 +49,8 @@ export interface AIEngineService {
   getLatency(): number;
   getModelVersion(): string;
   onNotification(callback: NotificationCallback): () => void;
+  /** Update the user's subscription tier and AI consent state. Validates: 22.5, 22.6 */
+  setUserContext(tier: SubscriptionTier, consent: AIConsentState): void;
 }
 
 // ── Constants ──
@@ -112,6 +121,11 @@ export function createAIEngine(config: Partial<AIEngineConfig> = {}): AIEngineSe
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   let disposed = false;
   let latencyWarningEmitted = false;
+
+  // AI consent and tier state — audio only transmitted for Next Gen + consent
+  // Validates: Requirements 22.5, 22.6
+  let userTier: SubscriptionTier = 'free';
+  let aiConsent: AIConsentState = { consentGranted: false, consentGrantedAt: null, consentRevokedAt: null };
 
   // Pending audio requests keyed by a monotonic request ID
   let nextRequestId = 0;
@@ -325,6 +339,11 @@ export function createAIEngine(config: Partial<AIEngineConfig> = {}): AIEngineSe
         return dspOutput;
       }
 
+      // Only transmit audio for Next Gen tier with explicit consent (Req 22.5, 22.6)
+      if (!canTransmitAudioToAI(userTier, aiConsent)) {
+        return dspOutput;
+      }
+
       if (!connected || !ws || ws.readyState !== 1 /* OPEN */) {
         // Fallback: return DSP output as-is when AI is unavailable
         return dspOutput;
@@ -409,6 +428,16 @@ export function createAIEngine(config: Partial<AIEngineConfig> = {}): AIEngineSe
       return () => {
         notificationListeners.delete(callback);
       };
+    },
+
+    setUserContext(tier: SubscriptionTier, consent: AIConsentState): void {
+      userTier = tier;
+      aiConsent = consent;
+
+      // If consent was revoked, immediately cease audio transmission (Req 22.6)
+      if (!canTransmitAudioToAI(tier, consent) && connected) {
+        rejectAllPending('AI audio consent revoked or tier ineligible');
+      }
     },
   };
 

@@ -86,6 +86,15 @@ function connectEngine(engine: AIEngineService): Promise<void> {
   return p;
 }
 
+/** Set up the engine with Next Gen tier and consent so audio is transmitted */
+function enableAITransmission(engine: AIEngineService): void {
+  engine.setUserContext('next_gen', {
+    consentGranted: true,
+    consentGrantedAt: Date.now(),
+    consentRevokedAt: null,
+  });
+}
+
 // ── Tests ──
 
 describe('AI Engine Service', () => {
@@ -110,6 +119,7 @@ describe('AI Engine Service', () => {
     it('disconnect cleans up and rejects pending requests', async () => {
       const engine = createAIEngine();
       await connectEngine(engine);
+      enableAITransmission(engine);
 
       const dsp = new Float32Array([0.1, 0.2]);
       const processPromise = engine.processAudio(dsp, 44100);
@@ -228,6 +238,7 @@ describe('AI Engine Service', () => {
       vi.spyOn(performance, 'now').mockImplementation(() => now);
 
       await connectEngine(engine);
+      enableAITransmission(engine);
       engine.setBlendLevel(1.0);
 
       const dsp = new Float32Array([0.1, 0.2, 0.3]);
@@ -271,6 +282,7 @@ describe('AI Engine Service', () => {
       vi.spyOn(performance, 'now').mockImplementation(() => now);
 
       await connectEngine(engine);
+      enableAITransmission(engine);
       engine.setBlendLevel(0.5);
 
       const dsp = new Float32Array([1.0, 0.0]);
@@ -304,6 +316,7 @@ describe('AI Engine Service', () => {
     it('falls back to DSP output on timeout (200ms)', async () => {
       const engine = createAIEngine();
       await connectEngine(engine);
+      enableAITransmission(engine);
       engine.setBlendLevel(1.0);
 
       const dsp = new Float32Array([0.42]);
@@ -323,6 +336,7 @@ describe('AI Engine Service', () => {
     it('clamps blend level to [0, 1]', async () => {
       const engine = createAIEngine();
       await connectEngine(engine);
+      enableAITransmission(engine);
 
       engine.setBlendLevel(-0.5);
       // Verify by processing with blend=0 (should return DSP directly)
@@ -370,6 +384,7 @@ describe('AI Engine Service', () => {
       vi.spyOn(performance, 'now').mockImplementation(() => now);
 
       await connectEngine(engine);
+      enableAITransmission(engine);
       notifications.length = 0;
 
       engine.setBlendLevel(1.0);
@@ -410,6 +425,7 @@ describe('AI Engine Service', () => {
       vi.spyOn(performance, 'now').mockImplementation(() => now);
 
       await connectEngine(engine);
+      enableAITransmission(engine);
       notifications.length = 0;
 
       const ws = getLastWS();

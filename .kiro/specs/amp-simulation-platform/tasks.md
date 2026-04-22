@@ -325,26 +325,26 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - _Requirements: 18.1, 18.3, 18.4, 18.5_
 
 - [ ] 13. Implement responsive layout and cross-platform support
-  - [-] 13.1 Implement responsive and adaptive layouts
+  - [x] 13.1 Implement responsive and adaptive layouts
     - Create primary layout for desktop (≥1024px) with full signal chain visible
     - Create secondary layout for tablet/mobile (<1024px) with collapsible sections and touch-optimized controls
     - Scale skeuomorphic visuals proportionally; maintain 44x44px touch targets
     - Support landscape and portrait orientations
     - _Requirements: 14.8, 27.1, 27.2, 27.3, 27.4, 27.5_
 
-  - [~] 13.2 Set up PWA with Service Worker
+  - [x] 13.2 Set up PWA with Service Worker
     - Create `public/manifest.json` and Service Worker for offline caching of DSP engine, data, and UI assets
     - Register Service Worker in the app layout
     - _Requirements: 17.4, 23.1_
 
-  - [~] 13.3 Set up Electron desktop app configuration
+  - [x] 13.3 Set up Electron desktop app configuration
     - Create `electron/` directory with main process, preload script, and BrowserWindow loading the Next.js app
     - Add Node.js bridges: `electron-audio-bridge`, `electron-midi-bridge`, `electron-fs-bridge`
     - Configure build for Mac (Apple Silicon + Intel) and Windows (x64) with single build commands
     - _Requirements: 17.2, 17.5, 17.6, 17.7_
 
 - [ ] 14. Implement security, performance, and brand assets
-  - [~] 14.1 Implement security measures
+  - [-] 14.1 Implement security measures
     - Enforce TLS 1.2+ for all client-server communication
     - Use bcrypt/Argon2 for password hashing with per-user salt (via Convex auth functions)
     - Ensure payment data handled exclusively through Stripe (PCI-DSS compliant); no raw card storage

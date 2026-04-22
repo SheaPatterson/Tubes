@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "electron:dev": "tsc -p electron/tsconfig.json && electron dist-electron/main.js",
+    "electron:build:mac": "next build && tsc -p electron/tsconfig.json && electron-builder --mac --config electron/electron-builder.config.ts",
+    "electron:build:win": "next build && tsc -p electron/tsconfig.json && electron-builder --win --config electron/electron-builder.config.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
