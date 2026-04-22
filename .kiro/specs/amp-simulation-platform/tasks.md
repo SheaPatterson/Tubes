@@ -88,7 +88,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
 - [x] 3. Checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 4. Implement Convex backend schema and functions
+- [x] 4. Implement Convex backend schema and functions
   - [x] 4.1 Create Convex schema definition
     - Create `convex/schema.ts` with all tables: ampList, ampManufacturerToneValues, preampToneValues, powerAmpToneValues, fxPedalList, fxPedalCircuitValues, fxCategoryValues, fxManufacturerValues, cabList, speakerList, cabToneValues, speakerToneValues, cabCombinedValues, micList, micTypeToneValues, userProfiles, userBioInformation, savedUserSignalChain, userSignalChainValues, subscriptions, realTimeUserSignalChain, micRealTimePositionValues, midiMappings, userSettings
     - Define all indexes as specified in the design document
@@ -127,7 +127,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
 - [x] 5. Checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 6. Implement DSP engine and AudioWorklet processors
+- [x] 6. Implement DSP engine and AudioWorklet processors
   - [x] 6.1 Create AudioWorklet processor base and input/output processors
     - Create `src/dsp/processors/base-processor.ts` with shared AudioWorkletProcessor utilities
     - Create `src/dsp/processors/input-settings-processor.ts` (gain, noise gate)
@@ -191,7 +191,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
 - [x] 7. Checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 8. Implement skeuomorphic UI controls and amp/FX renderers
+- [x] 8. Implement skeuomorphic UI controls and amp/FX renderers
   - [x] 8.1 Create rotary knob control component
     - Create `src/components/controls/rotary-knob.tsx` with mouse drag, touch gesture, and scroll wheel input
     - Support knob styles: chicken-head, pointer, dome
@@ -232,7 +232,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Create `src/components/cabinet/mic-position-control.tsx` with X/Y/Z position controls, distance slider, mic type selector, and preset buttons (Center, Middle, Outside)
     - _Requirements: 7.5, 7.6, 7.7, 8.1, 8.2_
 
-- [ ] 9. Implement service modules (AI, MIDI, recording, offline)
+- [x] 9. Implement service modules (AI, MIDI, recording, offline)
   - [x] 9.1 Implement AI Engine service
     - Create `src/services/ai-engine.ts` with WebSocket connection to FastAPI backend
     - Implement `processAudio`, `setBlendLevel` (0–100%), connection management, latency monitoring
@@ -270,7 +270,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
 - [x] 10. Checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 11. Implement application pages and layouts
+- [x] 11. Implement application pages and layouts
   - [x] 11.1 Create primary application layout with signal chain view
     - Create `src/app/(app)/layout.tsx` with glassmorphic navigation, sidebar, connectivity indicator, and responsive shell
     - Wire up Convex provider, auth context, and theme provider
@@ -314,7 +314,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Display descriptive error on invalid credentials; lock after 5 failed attempts for 60s
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6_
 
-- [ ] 12. Implement marketing and public pages
+- [x] 12. Implement marketing and public pages
   - [x] 12.1 Create public page layout and landing page
     - Create `src/app/(public)/layout.tsx` with public navigation
     - Create `src/app/(public)/page.tsx` (Landing) with interactive amp/pedal/cabinet mockups
@@ -324,7 +324,7 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Create pages: About, Personal Intelligence, How We Do It, How It Works, What It Costs (pricing table with tier comparison), Who to Contact, Why We Do It, Blueprint and Tech Stack, White Sheet, Secured Privacy (plain-language privacy policy), Not Your Typical Terms (plain-language ToS)
     - _Requirements: 18.1, 18.3, 18.4, 18.5_
 
-- [ ] 13. Implement responsive layout and cross-platform support
+- [x] 13. Implement responsive layout and cross-platform support
   - [x] 13.1 Implement responsive and adaptive layouts
     - Create primary layout for desktop (≥1024px) with full signal chain visible
     - Create secondary layout for tablet/mobile (<1024px) with collapsible sections and touch-optimized controls
@@ -343,8 +343,8 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Configure build for Mac (Apple Silicon + Intel) and Windows (x64) with single build commands
     - _Requirements: 17.2, 17.5, 17.6, 17.7_
 
-- [ ] 14. Implement security, performance, and brand assets
-  - [-] 14.1 Implement security measures
+- [x] 14. Implement security, performance, and brand assets
+  - [x] 14.1 Implement security measures
     - Enforce TLS 1.2+ for all client-server communication
     - Use bcrypt/Argon2 for password hashing with per-user salt (via Convex auth functions)
     - Ensure payment data handled exclusively through Stripe (PCI-DSS compliant); no raw card storage
@@ -352,20 +352,20 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - Restrict audio transmission to AI Engine only for Next Gen tier with explicit consent; cease on revocation
     - _Requirements: 22.1, 22.2, 22.3, 22.4, 22.5, 22.6_
 
-  - [~] 14.2 Implement error handling and recovery
+  - [x] 14.2 Implement error handling and recovery
     - Add AudioWorklet error recovery: retry module load 3x with exponential backoff; recover audio within 500ms on exception
     - Add AI Engine fallback: fall back to DSP-only on error/unreachable with non-blocking notification
     - Add audio interface disconnect handling: pause, prompt, resume within 2s
     - Add Convex connection loss handling: queue locally, sync on reconnect
     - _Requirements: 2.6, 9.6, 10.6, 21.3_
 
-  - [~] 14.3 Create brand identity assets
+  - [x] 14.3 Create brand identity assets
     - Create SVG logos for the platform and each Brand_Rename identity (MAC, KING, Manhattan, TOKYO)
     - Create favicon (ICO + SVG), banner assets
     - Apply brand package consistently across all UI surfaces
     - _Requirements: 19.1, 19.4_
 
-- [ ] 15. Final checkpoint — Ensure all tests pass
+- [x] 15. Final checkpoint — Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 ## Notes

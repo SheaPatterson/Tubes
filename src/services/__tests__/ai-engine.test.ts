@@ -463,6 +463,7 @@ describe('AI Engine Service', () => {
       vi.spyOn(performance, 'now').mockImplementation(() => now);
 
       await connectEngine(engine);
+      enableAITransmission(engine);
       engine.setBlendLevel(1.0);
 
       // Low latency → excellent
@@ -559,6 +560,7 @@ describe('AI Engine Service', () => {
       engine.onNotification((n) => notifications.push(n));
 
       await connectEngine(engine);
+      enableAITransmission(engine);
       notifications.length = 0;
 
       engine.setBlendLevel(1.0);

@@ -14,7 +14,7 @@ export const winston4x12: Cabinet = {
   visualConfig: {
     bodyColor: '#1a1a1a',
     grillPattern: 'basket-weave',
-    logoSvgPath: '/logos/winston-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 760,
     height: 840,
   },
@@ -34,7 +34,7 @@ export const winston4x12v: Cabinet = {
   visualConfig: {
     bodyColor: '#1a1a1a',
     grillPattern: 'basket-weave',
-    logoSvgPath: '/logos/winston-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 760,
     height: 840,
   },
@@ -52,7 +52,7 @@ export const winston2x12v: Cabinet = {
   visualConfig: {
     bodyColor: '#1a1a1a',
     grillPattern: 'basket-weave',
-    logoSvgPath: '/logos/winston-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 620,
     height: 520,
   },
@@ -72,7 +72,7 @@ export const fuzzy4x12: Cabinet = {
   visualConfig: {
     bodyColor: '#e85d00',
     grillPattern: 'diamond-mesh',
-    logoSvgPath: '/logos/fuzzy-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 760,
     height: 840,
   },
@@ -90,7 +90,7 @@ export const fuzzy2x12: Cabinet = {
   visualConfig: {
     bodyColor: '#e85d00',
     grillPattern: 'diamond-mesh',
-    logoSvgPath: '/logos/fuzzy-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 620,
     height: 520,
   },
@@ -110,7 +110,7 @@ export const usSteel4x12: Cabinet = {
   visualConfig: {
     bodyColor: '#2a2a2a',
     grillPattern: 'wicker',
-    logoSvgPath: '/logos/us-steel-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 760,
     height: 840,
   },
@@ -127,7 +127,7 @@ export const twanger1: Cabinet = {
   visualConfig: {
     bodyColor: '#d4a76a',
     grillPattern: 'tweed-cloth',
-    logoSvgPath: '/logos/twanger-cab.svg',
+    logoSvgPath: '/icons/logo.svg',
     width: 500,
     height: 480,
   },

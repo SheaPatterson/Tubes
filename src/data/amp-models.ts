@@ -52,7 +52,7 @@ export const winstonCHL: AmpModel = {
     panelColor: '#1a1a1a',
     knobStyle: 'chicken-head',
     fontFamily: 'serif',
-    logoSvgPath: '/logos/winston-chl.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'preampGain', x: 10, y: 50, size: 'lg' },
       { paramKey: 'bass', x: 25, y: 50, size: 'md' },
@@ -88,7 +88,7 @@ export const usSteelPlate: AmpModel = {
     panelColor: '#2b2b2b',
     knobStyle: 'pointer',
     fontFamily: 'sans-serif',
-    logoSvgPath: '/logos/us-steel-plate.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'preampGain', x: 10, y: 50, size: 'lg' },
       { paramKey: 'bass', x: 25, y: 50, size: 'md' },
@@ -123,7 +123,7 @@ export const twangerBanger: AmpModel = {
     panelColor: '#d4a76a',
     knobStyle: 'chicken-head',
     fontFamily: 'serif',
-    logoSvgPath: '/logos/twanger-banger.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'volume', x: 15, y: 50, size: 'md' },
       { paramKey: 'bass', x: 30, y: 50, size: 'md' },
@@ -158,7 +158,7 @@ export const fizzle0505: AmpModel = {
     panelColor: '#0a0a0a',
     knobStyle: 'pointer',
     fontFamily: 'sans-serif',
-    logoSvgPath: '/logos/fizzle-0505.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'preampGain', x: 10, y: 50, size: 'lg' },
       { paramKey: 'bass', x: 25, y: 50, size: 'md' },
@@ -194,7 +194,7 @@ export const fuzzyAcidTrip: AmpModel = {
     panelColor: '#e85d00',
     knobStyle: 'chicken-head',
     fontFamily: 'sans-serif',
-    logoSvgPath: '/logos/fuzzy-acidtrip.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'preampGain', x: 15, y: 50, size: 'lg' },
       { paramKey: 'bass', x: 30, y: 50, size: 'md' },
@@ -228,7 +228,7 @@ export const blitzkriegWarfare: AmpModel = {
     panelColor: '#8b0000',
     knobStyle: 'dome',
     fontFamily: 'sans-serif',
-    logoSvgPath: '/logos/blitzkrieg-warfare.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'preampGain', x: 10, y: 50, size: 'lg' },
       { paramKey: 'bass', x: 25, y: 50, size: 'md' },
@@ -263,7 +263,7 @@ export const berlinWall: AmpModel = {
     panelColor: '#0d0d0d',
     knobStyle: 'dome',
     fontFamily: 'sans-serif',
-    logoSvgPath: '/logos/berlin-wall.svg',
+    logoSvgPath: '/icons/logo.svg',
     layoutGrid: [
       { paramKey: 'preampGain', x: 8, y: 50, size: 'lg' },
       { paramKey: 'bass', x: 20, y: 50, size: 'md' },
