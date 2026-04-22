@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Guitar, Volume2, Mic } from "lucide-react";
+import { ChevronDown, Guitar, Volume2, Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { AmpModelRenderer } from "@/components/amp/amp-model-renderer";
@@ -11,6 +11,12 @@ import { MicPositionControl } from "@/components/cabinet/mic-position-control";
 import { RotaryKnob } from "@/components/controls/rotary-knob";
 import { SliderControl } from "@/components/controls/slider-control";
 import { ToggleSwitch } from "@/components/controls/toggle-switch";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { useIsCompact } from "@/hooks/use-breakpoint";
 
 import { ampModels } from "@/data/amp-models";
 import { cabinets } from "@/data/cabinets";
@@ -497,13 +503,15 @@ export default function SignalChainPage() {
   );
 
   // ── Render ──
+  const isCompact = useIsCompact();
+
   return (
-    <div className="flex flex-col gap-6 pb-8">
+    <div className="signal-chain-layout pb-8">
       {/* Signal chain flow indicator */}
       <SignalFlowHeader />
 
       {/* ── 1. Input Settings ── */}
-      <Section icon={<Guitar className="h-4 w-4" />} title="Input">
+      <Section icon={<Guitar className="h-4 w-4" />} title="Input" collapsible={isCompact}>
         <InputSettingsPanel
           settings={state.inputSettings}
           onGainChange={handleInputGainChange}
@@ -514,7 +522,7 @@ export default function SignalChainPage() {
       </Section>
 
       {/* ── 2. Preamp FX ── */}
-      <Section title="Preamp FX">
+      <Section title="Preamp FX" collapsible={isCompact}>
         <PedalBoard
           stage="preamp"
           pedals={state.preampFx}
@@ -528,7 +536,7 @@ export default function SignalChainPage() {
       </Section>
 
       {/* ── 3. Preamp Tubes + 4. Amplifier ── */}
-      <Section title="Amplifier">
+      <Section title="Amplifier" collapsible={isCompact} defaultOpen>
         <div className="flex flex-col gap-4">
           {/* Amp model selector */}
           <div className="flex flex-wrap items-center gap-2">
@@ -543,7 +551,7 @@ export default function SignalChainPage() {
               value={state.amplifier.modelId}
               onChange={(e) => handleAmpModelChange(e.target.value)}
               className={cn(
-                "rounded-md border border-white/10 bg-zinc-900/80 px-3 py-1.5 text-sm text-white",
+                "rounded-md border border-white/10 bg-zinc-900/80 px-3 py-1.5 text-sm text-white min-h-[44px]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               )}
             >
@@ -556,17 +564,19 @@ export default function SignalChainPage() {
           </div>
 
           {/* Amp renderer */}
-          <AmpModelRenderer
-            model={selectedAmp}
-            parameters={state.amplifier.parameters}
-            onParameterChange={handleToggleChange}
-            onChannelChange={handleChannelChange}
-          />
+          <div className="amp-panel-responsive skeuo-control">
+            <AmpModelRenderer
+              model={selectedAmp}
+              parameters={state.amplifier.parameters}
+              onParameterChange={handleToggleChange}
+              onChannelChange={handleChannelChange}
+            />
+          </div>
         </div>
       </Section>
 
       {/* ── 5. FX Loop ── */}
-      <Section title="FX Loop">
+      <Section title="FX Loop" collapsible={isCompact}>
         <PedalBoard
           stage="fxloop"
           pedals={state.fxLoop}
@@ -580,7 +590,7 @@ export default function SignalChainPage() {
       </Section>
 
       {/* ── 6. Cabinet + Mic ── */}
-      <Section icon={<Mic className="h-4 w-4" />} title="Cabinet & Mic">
+      <Section icon={<Mic className="h-4 w-4" />} title="Cabinet & Mic" collapsible={isCompact}>
         <div className="flex flex-col gap-4">
           {/* Cabinet selector */}
           <div className="flex flex-wrap items-center gap-2">
@@ -595,7 +605,7 @@ export default function SignalChainPage() {
               value={state.cabinet.cabinetId}
               onChange={(e) => handleCabinetChange(e.target.value)}
               className={cn(
-                "rounded-md border border-white/10 bg-zinc-900/80 px-3 py-1.5 text-sm text-white",
+                "rounded-md border border-white/10 bg-zinc-900/80 px-3 py-1.5 text-sm text-white min-h-[44px]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               )}
             >
@@ -607,8 +617,10 @@ export default function SignalChainPage() {
             </select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <CabinetRenderer cabinet={selectedCabinet} />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="skeuo-control">
+              <CabinetRenderer cabinet={selectedCabinet} />
+            </div>
             <MicPositionControl
               config={state.cabinet.mic}
               onPositionChange={handleMicPositionChange}
@@ -621,7 +633,7 @@ export default function SignalChainPage() {
       </Section>
 
       {/* ── 7. Output Settings ── */}
-      <Section icon={<Volume2 className="h-4 w-4" />} title="Output">
+      <Section icon={<Volume2 className="h-4 w-4" />} title="Output" collapsible={isCompact}>
         <OutputSettingsPanel
           settings={state.outputSettings}
           onMasterVolume={handleMasterVolume}
@@ -682,34 +694,87 @@ function ChevronRight({ className }: { className?: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Section wrapper — glassmorphic card
+// Section wrapper — glassmorphic card with optional collapsible behavior
+// On desktop (≥1024px): always expanded, no collapse trigger
+// On mobile/tablet (<1024px): collapsible with touch-friendly trigger
 // ---------------------------------------------------------------------------
 
 function Section({
   icon,
   title,
   children,
+  collapsible = false,
+  defaultOpen = false,
 }: {
   icon?: React.ReactNode;
   title: string;
   children: React.ReactNode;
+  collapsible?: boolean;
+  defaultOpen?: boolean;
 }) {
+  const [open, setOpen] = useState(!collapsible || defaultOpen);
+
+  // Desktop: always show content directly (no collapsible wrapper)
+  if (!collapsible) {
+    return (
+      <section
+        className={cn(
+          "rounded-xl border p-4 lg:p-5",
+          "backdrop-blur-[var(--glass-blur)] bg-[var(--glass-bg)] border-[var(--glass-border)]",
+          "shadow-[var(--glass-shadow)]",
+        )}
+      >
+        <div className="mb-3 flex items-center gap-2">
+          {icon && <span className="text-[var(--brand-accent)]">{icon}</span>}
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">
+            {title}
+          </h2>
+        </div>
+        {children}
+      </section>
+    );
+  }
+
+  // Mobile/tablet: collapsible section
   return (
-    <section
-      className={cn(
-        "rounded-xl border p-4 md:p-5",
-        "backdrop-blur-[var(--glass-blur)] bg-[var(--glass-bg)] border-[var(--glass-border)]",
-        "shadow-[var(--glass-shadow)]",
-      )}
-    >
-      <div className="mb-3 flex items-center gap-2">
-        {icon && <span className="text-[var(--brand-accent)]">{icon}</span>}
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">
-          {title}
-        </h2>
-      </div>
-      {children}
-    </section>
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <section
+        className={cn(
+          "rounded-xl border",
+          "backdrop-blur-[var(--glass-blur)] bg-[var(--glass-bg)] border-[var(--glass-border)]",
+          "shadow-[var(--glass-shadow)]",
+        )}
+      >
+        <CollapsibleTrigger asChild>
+          <button
+            type="button"
+            className={cn(
+              "signal-section-trigger touch-target w-full",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            )}
+            aria-label={`${open ? "Collapse" : "Expand"} ${title} section`}
+          >
+            <span className="flex items-center gap-2">
+              {icon && <span className="text-[var(--brand-accent)]">{icon}</span>}
+              <span className="text-sm font-semibold uppercase tracking-wider text-foreground/80">
+                {title}
+              </span>
+            </span>
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 text-muted-foreground transition-transform duration-200",
+                open && "rotate-180",
+              )}
+            />
+          </button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="px-4 pb-4">
+            {children}
+          </div>
+        </CollapsibleContent>
+      </section>
+    </Collapsible>
   );
 }
 

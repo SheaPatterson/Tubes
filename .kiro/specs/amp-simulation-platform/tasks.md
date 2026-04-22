@@ -315,17 +315,17 @@ This plan implements the Amp Simulation Platform in incremental phases: core typ
     - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6_
 
 - [ ] 12. Implement marketing and public pages
-  - [-] 12.1 Create public page layout and landing page
+  - [x] 12.1 Create public page layout and landing page
     - Create `src/app/(public)/layout.tsx` with public navigation
     - Create `src/app/(public)/page.tsx` (Landing) with interactive amp/pedal/cabinet mockups
     - _Requirements: 18.1, 18.2_
 
-  - [~] 12.2 Create remaining public pages
+  - [x] 12.2 Create remaining public pages
     - Create pages: About, Personal Intelligence, How We Do It, How It Works, What It Costs (pricing table with tier comparison), Who to Contact, Why We Do It, Blueprint and Tech Stack, White Sheet, Secured Privacy (plain-language privacy policy), Not Your Typical Terms (plain-language ToS)
     - _Requirements: 18.1, 18.3, 18.4, 18.5_
 
 - [ ] 13. Implement responsive layout and cross-platform support
-  - [~] 13.1 Implement responsive and adaptive layouts
+  - [-] 13.1 Implement responsive and adaptive layouts
     - Create primary layout for desktop (≥1024px) with full signal chain visible
     - Create secondary layout for tablet/mobile (<1024px) with collapsible sections and touch-optimized controls
     - Scale skeuomorphic visuals proportionally; maintain 44x44px touch targets

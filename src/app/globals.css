@@ -197,3 +197,93 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Responsive & Touch Target Utilities ── */
+
+@layer utilities {
+  /* Ensure minimum 44x44px touch targets on all interactive elements */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@layer components {
+  /* Responsive skeuomorphic control scaling */
+  .skeuo-control {
+    --skeuo-scale: 1;
+    transform: scale(var(--skeuo-scale));
+    transform-origin: center center;
+  }
+
+  /* Scale down skeuomorphic controls on smaller viewports */
+  @media (max-width: 1023px) {
+    .skeuo-control {
+      --skeuo-scale: 0.9;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .skeuo-control {
+      --skeuo-scale: 0.8;
+    }
+  }
+
+  /* Collapsible section styling for mobile signal chain */
+  .signal-section-trigger {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 0.75rem;
+    transition: background-color 150ms ease;
+  }
+
+  .signal-section-trigger:hover {
+    background-color: hsl(var(--accent) / 0.5);
+  }
+
+  /* Responsive amp panel: proportional scaling */
+  .amp-panel-responsive {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .amp-panel-responsive {
+      max-width: 800px;
+    }
+  }
+
+  /* Landscape orientation: use horizontal layout for signal chain on mobile */
+  @media (max-width: 1023px) and (orientation: landscape) {
+    .signal-chain-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+  }
+
+  @media (max-width: 1023px) and (orientation: portrait) {
+    .signal-chain-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .signal-chain-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+}
