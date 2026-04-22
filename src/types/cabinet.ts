@@ -30,7 +30,7 @@ export interface MicConfiguration {
   preset?: MicPreset;
 }
 
-interface CabinetVisualConfig {
+export interface CabinetVisualConfig {
   bodyColor: string;
   grillPattern: string;
   logoSvgPath: string;
