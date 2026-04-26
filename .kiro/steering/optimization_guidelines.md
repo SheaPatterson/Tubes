@@ -1,265 +1,69 @@
 ---
-name: Performance Optimization Guidelines
-fileMatchPattern: "**/*.{js,ts,py,go,java,rb,cs}"
-inclusion: false
-description: Best practices for writing high-performance, efficient code
+inclusion: fileMatch
+fileMatchPattern: ['**/*.ts', '**/*.tsx']
 ---
 
-You are an expert in performance optimization, algorithmic efficiency, and system design.
+# Performance Optimization Guidelines
 
-## Performance Principles
+Rules for writing performant code in this amp simulation platform. Audio latency target is sub-15ms round-trip.
 
-- Measure before optimizing
-- Optimize the critical path first
-- Consider algorithmic complexity
-- Balance performance with readability
-- Cache expensive operations
+## Core Principles
 
-## Algorithmic Optimization
+- Measure before optimizing — profile the critical path first
+- Prefer algorithmic improvements (O(n) over O(n²)) before micro-optimizations
+- Balance performance with readability; don't sacrifice clarity without benchmarks
+- Cache expensive computations; use `useMemo`/`useCallback` where re-renders are measurable
 
-### Time Complexity Awareness
+## AudioWorklet / DSP Rules (Critical Path)
 
-```python
-# Bad: O(n²) complexity
-def find_duplicates_naive(items):
-    duplicates = []
-    for i in range(len(items)):
-        for j in range(i + 1, len(items)):
-            if items[i] == items[j] and items[i] not in duplicates:
-                duplicates.append(items[i])
-    return duplicates
+All DSP runs in `AudioWorklet` processors under `src/dsp/processors/`. These are the strictest performance constraints in the codebase.
 
-# Good: O(n) complexity
-def find_duplicates_optimal(items):
-    seen = set()
-    duplicates = set()
-    for item in items:
-        if item in seen:
-            duplicates.add(item)
-        seen.add(item)
-    return list(duplicates)
-```
+- Never allocate in the audio render loop — no `new`, no object literals, no array spreads, no closures
+- Pre-allocate buffers and reuse them via object pooling patterns
+- Use `Float32Array` typed arrays for sample data; avoid generic arrays
+- Use `ParameterSmoother` (from `base-processor.ts`) for parameter changes to avoid zipper noise — never set values directly per-sample
+- Avoid branching in inner sample loops; prefer branchless math (`clamp`, `lerp` from `base-processor.ts`)
+- Never use `structuredClone`, `JSON.parse/stringify`, or `Map`/`Set` in the audio thread
+- Keep processor `process()` methods minimal — no logging, no string operations, no error handling beyond early return
 
-### Data Structure Selection
+## React / Next.js Performance
 
-```javascript
-// Choose appropriate data structures
-class PerformantCache {
-    constructor(maxSize = 1000) {
-        this.maxSize = maxSize;
-        this.cache = new Map(); // O(1) access time
-        this.accessOrder = []; // Consider LinkedList for LRU
-    }
-    
-    get(key) {
-        if (this.cache.has(key)) {
-            // Move to end (most recently used)
-            this.updateAccessOrder(key);
-            return this.cache.get(key);
-        }
-        return null;
-    }
-    
-    set(key, value) {
-        if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
-            // Remove least recently used
-            const lru = this.accessOrder.shift();
-            this.cache.delete(lru);
-        }
-        this.cache.set(key, value);
-        this.updateAccessOrder(key);
-    }
-}
-```
+- Default to Server Components; add `"use client"` only when interactivity or browser APIs are needed
+- Avoid re-renders on skeuomorphic controls (`src/components/controls/`) — these are visually expensive. Memoize with `React.memo` and stable callbacks
+- Use `useCallback` for event handlers passed to knob/slider/toggle components
+- Colocate state as low as possible; avoid lifting state that only one control needs
+- For Convex subscriptions, select only the fields you need — don't subscribe to entire documents when you only read one property
+- Lazy-load heavy components (amp model renderer, pedal board) with `next/dynamic`
 
-## Memory Optimization
+## TypeScript Patterns
 
-### Object Pooling
+- Prefer `interface` over `type` for object shapes (better error messages, faster compiler checks)
+- Use `as const` for static lookup tables (amp models, FX pedals, cabinets) to enable narrow types without runtime cost
+- Avoid `any` — it disables the compiler's ability to catch performance-related type errors
+- Use discriminated unions over runtime type checks where possible
 
-```typescript
-class ObjectPool<T> {
-    private available: T[] = [];
-    private inUse = new Set<T>();
-    
-    constructor(
-        private factory: () => T,
-        private reset: (obj: T) => void,
-        private initialSize: number = 10
-    ) {
-        // Pre-allocate objects
-        for (let i = 0; i < initialSize; i++) {
-            this.available.push(factory());
-        }
-    }
-    
-    acquire(): T {
-        let obj = this.available.pop();
-        if (!obj) {
-            obj = this.factory();
-        }
-        this.inUse.add(obj);
-        return obj;
-    }
-    
-    release(obj: T): void {
-        if (this.inUse.delete(obj)) {
-            this.reset(obj);
-            this.available.push(obj);
-        }
-    }
-}
+## Data Structure Selection
 
-// Usage
-const bufferPool = new ObjectPool(
-    () => new ArrayBuffer(1024 * 1024), // 1MB buffers
-    (buffer) => new Uint8Array(buffer).fill(0), // Clear on release
-    5 // Keep 5 buffers ready
-);
-```
+- Use `Map` over plain objects for dynamic key lookups (O(1) with better memory behavior for frequent add/delete)
+- Use `Set` for membership checks instead of `Array.includes` (O(1) vs O(n))
+- For ordered pedal lists, use arrays — but avoid `filter`/`map` chains that create intermediate arrays in hot paths
+- For MIDI mapping lookups, use `Map<number, MappingTarget>` keyed by CC number
 
-### Memory-Efficient Patterns
+## Async & Concurrency
 
-```python
-# Generator for large datasets
-def process_large_file(filename):
-    with open(filename, 'r') as file:
-        for line in file:  # Process line by line
-            yield process_line(line)  # Memory efficient
+- Use `Promise.all` for independent parallel fetches; avoid sequential `await` in loops
+- For batched Convex mutations, group related writes into a single mutation function
+- Use controlled concurrency (batch size limit) when loading multiple IR files or presets
 
-# Bad: Loading entire file
-def process_large_file_bad(filename):
-    with open(filename, 'r') as file:
-        lines = file.readlines()  # Loads entire file into memory
-        return [process_line(line) for line in lines]
-```
+## Memory Management
 
-## Async Performance
+- Avoid closures that capture large scopes in long-lived callbacks (event listeners, MIDI handlers)
+- Clean up `AudioWorkletNode` connections and event listeners in `dispose()` methods
+- Use `WeakRef` or explicit cleanup for cached audio buffers that may be swapped out
+- In service singletons (`src/services/`), implement `dispose()` and call it on unmount
 
-### Parallel Processing
+## Bundle Size
 
-```javascript
-// Concurrent request handling
-async function fetchMultipleUrls(urls) {
-    // Bad: Sequential processing
-    const resultsBad = [];
-    for (const url of urls) {
-        resultsBad.push(await fetch(url));
-    }
-    
-    // Good: Parallel processing
-    const results = await Promise.all(
-        urls.map(url => fetch(url))
-    );
-    
-    // Better: Controlled concurrency
-    const concurrencyLimit = 5;
-    const results = [];
-    for (let i = 0; i < urls.length; i += concurrencyLimit) {
-        const batch = urls.slice(i, i + concurrencyLimit);
-        const batchResults = await Promise.all(
-            batch.map(url => fetch(url))
-        );
-        results.push(...batchResults);
-    }
-    
-    return results;
-}
-```
-
-## Database Optimization
-
-### Query Optimization
-
-```sql
--- Bad: N+1 query problem
-SELECT * FROM orders WHERE user_id = ?;
--- Then for each order:
-SELECT * FROM order_items WHERE order_id = ?;
-
--- Good: Single query with JOIN
-SELECT o.*, oi.*
-FROM orders o
-LEFT JOIN order_items oi ON o.id = oi.order_id
-WHERE o.user_id = ?;
-
--- Better: With indexing
-CREATE INDEX idx_orders_user_id ON orders(user_id);
-CREATE INDEX idx_order_items_order_id ON order_items(order_id);
-```
-
-### Connection Pooling
-
-```javascript
-// Database connection pool
-const { Pool } = require('pg');
-
-const pool = new Pool({
-    max: 20, // Maximum connections
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
-});
-
-// Reuse connections
-async function queryDatabase(sql, params) {
-    const client = await pool.connect();
-    try {
-        return await client.query(sql, params);
-    } finally {
-        client.release();
-    }
-}
-```
-
-## Caching Strategies
-
-### Multi-Level Caching
-
-```typescript
-class MultiLevelCache {
-    constructor(
-        private l1Cache: Map<string, any>, // In-memory
-        private l2Cache: Redis, // Redis
-        private ttl: number = 3600 // 1 hour
-    ) {}
-    
-    async get(key: string): Promise<any> {
-        // Check L1 cache first
-        if (this.l1Cache.has(key)) {
-            return this.l1Cache.get(key);
-        }
-        
-        // Check L2 cache
-        const l2Value = await this.l2Cache.get(key);
-        if (l2Value) {
-            // Promote to L1
-            this.l1Cache.set(key, l2Value);
-            return l2Value;
-        }
-        
-        return null;
-    }
-    
-    async set(key: string, value: any): Promise<void> {
-        // Set in both caches
-        this.l1Cache.set(key, value);
-        await this.l2Cache.setex(key, this.ttl, value);
-        
-        // Implement LRU for L1 cache
-        if (this.l1Cache.size > 1000) {
-            const firstKey = this.l1Cache.keys().next().value;
-            this.l1Cache.delete(firstKey);
-        }
-    }
-}
-```
-
-## Best Practices
-
-- Profile before optimizing
-- Use appropriate data structures
-- Minimize memory allocations
-- Batch operations when possible
-- Implement caching strategically
-- Monitor performance metrics
-- Consider lazy loading
-- Optimize critical paths first
+- Import only what you need from `lucide-react` — each icon is tree-shakeable but only if imported individually
+- Avoid barrel file re-exports (`index.ts`) for large component directories
+- Use `next/dynamic` with `ssr: false` for components that depend on Web Audio or Web MIDI APIs
