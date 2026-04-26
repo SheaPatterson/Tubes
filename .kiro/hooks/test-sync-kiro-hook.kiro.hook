@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Test Sync",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "{\n  \"name\": \"Test File Synchronization\",\n  \"description\": \"Auto-creates/updates test files on save\",\n  \"version\": \"1\",\n  \"when\": {\n    \"type\": \"fileSaved\",\n    \"patterns\": [\"src/**/*.{ts,tsx,js,jsx}\"]\n  },\n  \"then\": {\n    \"type\": \"askAgent\",\n    \"prompt\": \"Source file saved:\n1. Check for test file (.test.ts/.test.tsx)\n2. If missing: Create with tests for all exports per testing-standards.md\n3. If exists: Add tests for untested functionality\n4. Follow structure.md conventions\n5. Don't modify source"
+  },
+  "workspaceFolderName": "NEXT.JS TEMPLATE",
+  "shortName": "test-sync-kiro-hook"
+}

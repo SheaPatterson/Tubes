@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <!-- Open Graph / social banner (1200x630) -->
+  <rect width="1200" height="630" fill="#1a1a2e"/>
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <!-- Logo mark -->
+  <path d="M480 380V260l120-60 120 60v120" stroke="#e94560" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="600" cy="320" r="28" fill="#e94560"/>
+  <line x1="600" y1="292" x2="600" y2="208" stroke="#e94560" stroke-width="8" stroke-linecap="round"/>
+  <!-- Title -->
+  <text x="600" y="480" font-family="sans-serif" font-weight="700" font-size="56" fill="white" text-anchor="middle">Amp Simulation Platform</text>
+  <!-- Tagline -->
+  <text x="600" y="530" font-family="sans-serif" font-weight="400" font-size="24" fill="#a0a0b8" text-anchor="middle">Professional-grade guitar tone. Anywhere.</text>
+  <!-- Brand color bar -->
+  <rect x="0" y="610" width="300" height="20" fill="#f5a623"/>
+  <rect x="300" y="610" width="300" height="20" fill="#2563eb"/>
+  <rect x="600" y="610" width="300" height="20" fill="#7c3aed"/>
+  <rect x="900" y="610" width="300" height="20" fill="#059669"/>
+</svg>

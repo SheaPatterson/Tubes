@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Documentation Update",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "{\n  \"name\": \"API Documentation Updater\",\n  \"description\": \"Updates API docs on API file changes\",\n  \"version\": \"1\",\n  \"when\": {\n    \"type\": \"fileSaved\",\n    \"patterns\": [\"src/{api,routes,endpoints,controllers}/**/*.{ts,py}\"]\n  },\n  \"then\": {\n    \"type\": \"askAgent\",\n    \"prompt\": \"API file modified:\n1. Analyze endpoint/parameter/response changes\n2. Update OpenAPI spec in api-specs/\n3. Use AWS Documentation MCP for AWS patterns\n4. Update README API section\n5. Update JSDoc/docstrings\n6. Verify api-standards.md compliance"
+  }
+}

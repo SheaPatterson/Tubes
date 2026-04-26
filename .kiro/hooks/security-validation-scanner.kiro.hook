@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "Security Validation Scanner",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "{\n  \"name\": \"Security Validation Scanner\",\n  \"description\": \"Pre-commit security scan\",\n  \"version\": \"1\",\n  \"when\": {\"type\": \"manual\"},\n  \"then\": {\n    \"type\": \"askAgent\",\n    \"prompt\": \"Security scan:\n1. Scan for: credentials, API keys, console.log with sensitive data, SQL injection, unsafe eval()\n2. Infrastructure: CDK Nag (CDK MCP), Checkov (Terraform MCP)\n3. Verify security-policies.md: input validation, auth checks, encryption\n4. Report: issues by severity (CRITICAL/HIGH/MEDIUM/LOW), locations, fixes, pass/fail"
+  }
+}
