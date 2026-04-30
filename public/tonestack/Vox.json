@@ -1,0 +1,72 @@
+{
+  "selectedTonestackIndex": 0,
+  "globalControlEnabled": true,
+  "globalControlValues": {
+    "RB": 0.31,
+    "RM": 0.32,
+    "RT": 0.61,
+    "RV": 0.5
+  },
+  "potDisplayRange": "D",
+  "potAuxDisplayMode": "v",
+  "responseSettings": {
+    "magnitude": true,
+    "phase": true,
+    "scope": false,
+    "scopeFrequency": 100
+  },
+  "tonestacks": [
+    {
+      "id": "vox",
+      "components": {
+        "RIN": "717",
+        "RL": "600k",
+        "RB": {
+          "value": "1M",
+          "taper": "A",
+          "control": 0.5
+        },
+        "RT": {
+          "value": "1M",
+          "taper": "A",
+          "control": 0.5
+        },
+        "R1": "100k",
+        "R2": "10k",
+        "C1": "47p",
+        "C2": "22n",
+        "C3": "22n"
+      }
+    },
+    {
+      "id": "crte",
+      "components": {
+        "RIN": "1k",
+        "RL": "1M",
+        "RB": {
+          "value": "250k",
+          "taper": "A",
+          "control": 0.5
+        },
+        "RM": {
+          "value": "50k",
+          "taper": "A",
+          "control": 0.5
+        },
+        "RT": {
+          "value": "250k",
+          "taper": "L",
+          "control": 0.5
+        },
+        "R1": "68k",
+        "R2": "47k",
+        "R3": "22k",
+        "R4": "10k",
+        "C1": "220p",
+        "C2": "47n",
+        "C3": "220n",
+        "C4": "4.7n"
+      }
+    }
+  ]
+}

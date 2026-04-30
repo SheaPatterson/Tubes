@@ -1,0 +1,29 @@
+# M2N3796 NMOS
+
+[https://www.duncanamps.com/spice/mosfets/ndmos3t.mod](https://www.duncanamps.com/spice/mosfets/ndmos3t.mod)
+
+> Site: **Duncanamps**
+
+> Saved [`Wed, 29 Apr`](day://2026.04.29) at 21:30
+
+---
+
+```other
+*2N3796 MCE 7/6/95
+*Assumes default L=100U W=100U
+*MCE 25V 20mA 150 ohm
+.MODEL M2N3796 NMOS (LEVEL=1 VTO=-3 KP=960U GAMMA=3.72
++ PHI=.75 LAMBDA=4M RD=21 RS=21 IS=10F PB=.8 MJ=.46
++ CBD=13.2P CBS=15.9P CGSO=6N CGDO=5N CGBO=39N)
+
+*2N3797 MCE 7/6/95
+*Assumes default L=100U W=100U
+*MCE 25V 20mA 150 ohm
+.MODEL M2N3797 NMOS (LEVEL=1 VTO=-3 KP=1.8M GAMMA=3.72
++ PHI=.75 LAMBDA=7.5M RD=21 RS=21 IS=10F PB=.8 MJ=.46
++ CBD=13.2P CBS=15.9P CGSO=6N CGDO=5N CGBO=39N)
+*MCE 25V 20mA 150 ohm
+.MODEL M2N3796X NMOS(VTO=-0.778 KP=0.00096 GAMMA=3.72 PHI=0.75 LAMBDA=0.004 
++ RD=21 RS=21 CBD=1.32E-11 CBS=1.59E-11 CGSO=6E-9 CGDO=5E-9 CGBO=3.9E-8 
++ MJ=0.46 )
+```

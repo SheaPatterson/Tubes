@@ -1,0 +1,4 @@
+Analogy Component,Electronic Counterpart,Description
+Water,Analog Signal,The audio voltage being sampled and moved.
+Buckets,Capacitors,Storage elements that hold the charge (voltage).
+People,Transistors,Switches that open and close to pass the charge.

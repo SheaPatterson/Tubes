@@ -1,0 +1,45 @@
+{
+  "selectedTonestackIndex": 0,
+  "globalControlEnabled": true,
+  "globalControlValues": {
+    "RB": 0.31,
+    "RM": 0.32,
+    "RT": 0.61
+  },
+  "potDisplayRange": "D",
+  "potAuxDisplayMode": "v",
+  "responseSettings": {
+    "magnitude": true,
+    "phase": true,
+    "scope": false,
+    "scopeFrequency": 100
+  },
+  "tonestacks": [
+    {
+      "id": "5f6a",
+      "components": {
+        "RIN": "1.3k",
+        "RL": "1M",
+        "RB": {
+          "value": "1M",
+          "taper": "A",
+          "control": 0.31
+        },
+        "RM": {
+          "value": "25k",
+          "taper": "L",
+          "control": 0.65
+        },
+        "RT": {
+          "value": "250k",
+          "taper": "L",
+          "control": 0.35
+        },
+        "R1": "56k",
+        "C1": "250p",
+        "C2": "20n",
+        "C3": "20n"
+      }
+    }
+  ]
+}

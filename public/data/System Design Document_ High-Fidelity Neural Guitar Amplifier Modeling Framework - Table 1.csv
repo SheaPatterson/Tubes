@@ -1,0 +1,6 @@
+Feature,Black-Box Modeling,Grey-Box Modeling
+Methodology,Purely data-driven; ignores internal circuit structure.,Combines partial theoretical structures with neural components.
+Interpretability,"Low; the model is a ""snapshot"" of the behavior.","Higher; uses differentiable DSP blocks (filters, EQs)."
+Computational Efficiency,Higher overhead for complex saturations.,Very high; can reduce operations by up to 90%.
+Accuracy,"State-of-the-art for static ""snapshots"" (e.g., NAM).",Comparable to black-box while maintaining flexibility.
+Best Use Case,High-end workstation captures.,Mobile/embedded deployment and parametric control.

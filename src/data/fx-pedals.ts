@@ -439,6 +439,197 @@ export const tokyoTubeScreamer: FxPedalDefinition = {
 };
 
 // ═══════════════════════════════════════════════════════════════
+// Independent / Boutique Pedals
+// (Circuit analysis sources in /public/circuts/)
+// ═══════════════════════════════════════════════════════════════
+
+/** Klon Centaur — transparent overdrive, source: /public/circuts/Klon Centaur Analysis.pdf */
+export const klonGoldenHorse: FxPedalDefinition = {
+  id: 'golden-horse',
+  name: 'Golden Horse',
+  brand: 'MAC',
+  originalBrand: 'Klon',
+  category: 'overdrive',
+  controls: [
+    { name: 'Gain', paramKey: 'gain', type: 'knob', min: 0, max: 10, defaultValue: 3, step: 0.1 },
+    { name: 'Treble', paramKey: 'treble', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Output', paramKey: 'output', type: 'knob', min: 0, max: 10, defaultValue: 6, step: 0.1 },
+  ],
+  circuitType: 'germanium-diode-overdrive',
+  visualConfig: {
+    bodyColor: '#c9a84c',
+    knobStyle: 'small-black',
+    labelFont: 'serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 140,
+    height: 220,
+  },
+  tierRequired: 'classic',
+};
+
+/** ProCo Rat — distortion, source: /public/circuts/ProCo Rat Analysis.pdf */
+export const ratDistortion: FxPedalDefinition = {
+  id: 'rat-distortion',
+  name: 'Rat',
+  brand: 'MAC',
+  originalBrand: 'ProCo',
+  category: 'distortion',
+  controls: [
+    { name: 'Distortion', paramKey: 'distortion', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Filter', paramKey: 'filter', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Volume', paramKey: 'volume', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+  ],
+  circuitType: 'opamp-hard-clipper',
+  visualConfig: {
+    bodyColor: '#1a1a1a',
+    knobStyle: 'small-white',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 130,
+    height: 210,
+  },
+  tierRequired: 'classic',
+};
+
+/** Fuzz Face — germanium fuzz, source: /public/circuts/Fuzz Face Analysis.pdf */
+export const fuzzFace: FxPedalDefinition = {
+  id: 'fuzz-face',
+  name: 'Fuzz Face',
+  brand: 'MAC',
+  originalBrand: 'Dallas Arbiter',
+  category: 'distortion',
+  controls: [
+    { name: 'Volume', paramKey: 'volume', type: 'knob', min: 0, max: 10, defaultValue: 7, step: 0.1 },
+    { name: 'Fuzz', paramKey: 'fuzz', type: 'knob', min: 0, max: 10, defaultValue: 8, step: 0.1 },
+  ],
+  circuitType: 'germanium-fuzz',
+  visualConfig: {
+    bodyColor: '#4169e1',
+    knobStyle: 'large-black',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 160,
+    height: 160,
+  },
+  tierRequired: 'classic',
+};
+
+/** Dallas Rangemaster — treble booster, source: /public/circuts/Dallas Rangemaster Treble Booster Circuit Analysis.pdf */
+export const rangemasterBoost: FxPedalDefinition = {
+  id: 'rangemaster-boost',
+  name: 'Rangemaster',
+  brand: 'MAC',
+  originalBrand: 'Dallas',
+  category: 'overdrive',
+  controls: [
+    { name: 'Range', paramKey: 'range', type: 'knob', min: 0, max: 10, defaultValue: 7, step: 0.1 },
+  ],
+  circuitType: 'germanium-treble-booster',
+  visualConfig: {
+    bodyColor: '#8b8b8b',
+    knobStyle: 'small-black',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 100,
+    height: 140,
+  },
+  tierRequired: 'classic',
+};
+
+/** Dunlop Crybaby — wah pedal, source: /public/circuts/Dunlop Crybaby GCB-95 Circuit Analysis..pdf */
+export const crybabyWah: FxPedalDefinition = {
+  id: 'crybaby-wah',
+  name: 'Crybaby Wah',
+  brand: 'MAC',
+  originalBrand: 'Dunlop',
+  category: 'modulation',
+  controls: [
+    { name: 'Position', paramKey: 'position', type: 'slider', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Q', paramKey: 'q', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Range', paramKey: 'range', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+  ],
+  circuitType: 'inductor-wah',
+  visualConfig: {
+    bodyColor: '#2a2a2a',
+    knobStyle: 'small-black',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 140,
+    height: 280,
+  },
+  tierRequired: 'classic',
+};
+
+/** Vox V847 — wah pedal, source: /public/circuts/Vox V847 Analysis.pdf */
+export const voxWah: FxPedalDefinition = {
+  id: 'vox-wah',
+  name: 'V847 Wah',
+  brand: 'MAC',
+  originalBrand: 'Vox',
+  category: 'modulation',
+  controls: [
+    { name: 'Position', paramKey: 'position', type: 'slider', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+  ],
+  circuitType: 'inductor-wah',
+  visualConfig: {
+    bodyColor: '#1a1a1a',
+    knobStyle: 'small-black',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 140,
+    height: 280,
+  },
+  tierRequired: 'classic',
+};
+
+/** Boss CE-2 Chorus — source: /public/circuts/Boss CE-2 Analysis.pdf */
+export const kingCE2Chorus: FxPedalDefinition = {
+  id: 'king-ce2-chorus',
+  name: 'CE-2 Chorus',
+  brand: 'KING',
+  originalBrand: 'BOSS',
+  category: 'modulation',
+  controls: [
+    { name: 'Rate', paramKey: 'rate', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Depth', paramKey: 'depth', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+  ],
+  circuitType: 'bbd-chorus',
+  visualConfig: {
+    bodyColor: '#4488cc',
+    knobStyle: 'boss-style',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-king.svg',
+    width: 130,
+    height: 210,
+  },
+  tierRequired: 'classic',
+};
+
+/** PT2399-based delay — source: /public/circuts/PT2399 Analysis.pdf */
+export const echoDelay: FxPedalDefinition = {
+  id: 'echo-delay',
+  name: 'Echo Delay',
+  brand: 'MAC',
+  originalBrand: 'Generic',
+  category: 'delay',
+  controls: [
+    { name: 'Time', paramKey: 'time', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+    { name: 'Feedback', paramKey: 'feedback', type: 'knob', min: 0, max: 10, defaultValue: 4, step: 0.1 },
+    { name: 'Mix', paramKey: 'mix', type: 'knob', min: 0, max: 10, defaultValue: 5, step: 0.1 },
+  ],
+  circuitType: 'pt2399-delay',
+  visualConfig: {
+    bodyColor: '#556b2f',
+    knobStyle: 'small-black',
+    labelFont: 'sans-serif',
+    logoSvgPath: '/icons/logo-mac.svg',
+    width: 120,
+    height: 200,
+  },
+  tierRequired: 'classic',
+};
+
+// ═══════════════════════════════════════════════════════════════
 // Aggregated exports
 // ═══════════════════════════════════════════════════════════════
 
@@ -459,10 +650,19 @@ export const fxPedals: FxPedalDefinition[] = [
   kingEQ,
   kingChorus,
   kingFlanger,
+  kingCE2Chorus,
   kingME90,
   // Manhattan (Electro-Harmonix)
   manhattanBigMuff,
   manhattanSmallClone,
   // TOKYO (Ibanez)
   tokyoTubeScreamer,
+  // Boutique / Independent
+  klonGoldenHorse,
+  ratDistortion,
+  fuzzFace,
+  rangemasterBoost,
+  crybabyWah,
+  voxWah,
+  echoDelay,
 ];

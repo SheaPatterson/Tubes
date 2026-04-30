@@ -35,7 +35,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { ampModels } from "@/data/amp-models";
+import { ampModels as staticAmpModels } from "@/data/amp-models";
+import { useAmpModels } from "@/hooks/use-amp-models";
+import { useSignalChains, useSignalChainMutations } from "@/hooks/use-signal-chains";
 import type { AmpModel, AmpParameters } from "@/types/amp";
 import type { SavedSignalChain, SignalChainState } from "@/types/signal-chain";
 
@@ -43,7 +45,7 @@ import type { SavedSignalChain, SignalChainState } from "@/types/signal-chain";
 // Helpers
 // ---------------------------------------------------------------------------
 
-const DEFAULT_AMP = ampModels[0];
+const DEFAULT_AMP = staticAmpModels[0];
 
 function buildDefaultAmpParameters(model: AmpModel): AmpParameters {
   const params: Record<string, number> = {};
@@ -120,7 +122,7 @@ function formatDate(timestamp: number): string {
   });
 }
 
-function getAmpName(modelId: string): string {
+function getAmpName(modelId: string, ampModels: AmpModel[]): string {
   return ampModels.find((a) => a.id === modelId)?.name ?? "Unknown Amp";
 }
 
@@ -152,7 +154,7 @@ function createSeedChains(): SavedSignalChain[] {
         amplifier: {
           modelId: "us-steel-plate",
           parameters: {
-            ...buildDefaultAmpParameters(ampModels[1]),
+            ...buildDefaultAmpParameters(staticAmpModels[1]),
             channel: "overdrive",
           },
         },
@@ -169,7 +171,7 @@ function createSeedChains(): SavedSignalChain[] {
         amplifier: {
           modelId: "fizzle-0505",
           parameters: {
-            ...buildDefaultAmpParameters(ampModels[3]),
+            ...buildDefaultAmpParameters(staticAmpModels[3]),
             channel: "crunch",
           },
         },
@@ -185,7 +187,23 @@ function createSeedChains(): SavedSignalChain[] {
 // ---------------------------------------------------------------------------
 
 export default function SavedSignalChainsPage() {
-  const [chains, setChains] = useState<SavedSignalChain[]>(createSeedChains);
+  const { data: ampModels } = useAmpModels();
+  const { data: convexChains, isLoading } = useSignalChains(null);
+  const mutations = useSignalChainMutations();
+
+  // Local state for chains — seeded from Convex or fallback
+  const [localChains, setLocalChains] = useState<SavedSignalChain[]>(() => createSeedChains());
+  const [synced, setSynced] = useState(false);
+
+  // Sync Convex data into local state once loaded
+  React.useEffect(() => {
+    if (convexChains !== undefined && convexChains.length > 0 && !synced) {
+      setLocalChains(convexChains);
+      setSynced(true);
+    }
+  }, [convexChains, synced]);
+
+  const chains = synced && convexChains ? convexChains : localChains;
   const [sortField, setSortField] = useState<SortField>("updatedAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [searchQuery, setSearchQuery] = useState("");
@@ -240,8 +258,12 @@ export default function SavedSignalChainsPage() {
       createdAt: now,
       updatedAt: now,
     };
-    setChains((prev) => [newChain, ...prev]);
-  }, [chains.length]);
+    setLocalChains((prev) => [newChain, ...prev]);
+    // Persist to Convex if available (fire-and-forget)
+    if (mutations.available) {
+      mutations.saveChain("" as any, newChain.name, newChain.config);
+    }
+  }, [chains.length, mutations]);
 
   // ── Load chain ──
   const handleLoad = useCallback((_chain: SavedSignalChain) => {
@@ -259,16 +281,20 @@ export default function SavedSignalChainsPage() {
   const confirmRename = useCallback(() => {
     if (!renameTarget || !renameValue.trim()) return;
     const now = Date.now();
-    setChains((prev) =>
+    setLocalChains((prev) =>
       prev.map((c) =>
         c.id === renameTarget.id
           ? { ...c, name: renameValue.trim(), updatedAt: now }
           : c,
       ),
     );
+    // Persist to Convex
+    if (mutations.available) {
+      mutations.renameChain(renameTarget.id as any, renameValue.trim());
+    }
     setRenameTarget(null);
     setRenameValue("");
-  }, [renameTarget, renameValue]);
+  }, [renameTarget, renameValue, mutations]);
 
   // ── Delete ──
   const openDelete = useCallback((chain: SavedSignalChain) => {
@@ -277,9 +303,13 @@ export default function SavedSignalChainsPage() {
 
   const confirmDelete = useCallback(() => {
     if (!deleteTarget) return;
-    setChains((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+    setLocalChains((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+    // Persist to Convex
+    if (mutations.available) {
+      mutations.deleteChain(deleteTarget.id as any);
+    }
     setDeleteTarget(null);
-  }, [deleteTarget]);
+  }, [deleteTarget, mutations]);
 
   return (
     <div className="flex flex-col gap-4 pb-8 min-h-[calc(100vh-3.5rem)]">
@@ -478,7 +508,7 @@ function ChainCard({
   onRename: (chain: SavedSignalChain) => void;
   onDelete: (chain: SavedSignalChain) => void;
 }) {
-  const ampName = getAmpName(chain.config.amplifier.modelId);
+  const ampName = getAmpName(chain.config.amplifier.modelId, staticAmpModels);
   const pedalCount =
     chain.config.preampFx.length + chain.config.fxLoop.length;
 

@@ -148,8 +148,8 @@ function processBiquad(st: SimpleBiquadState, x: number): number {
 
 // ─── Convolution buffer ──────────────────────────────────────────────
 
-/** Maximum IR kernel length (samples). Longer IRs are truncated. */
-const MAX_IR_LENGTH = 512;
+/** Maximum IR kernel length (samples). Real WAV IRs at 48kHz are typically 10k–24k samples. */
+const MAX_IR_LENGTH = 24000;
 
 // ─── Processor ───────────────────────────────────────────────────────
 

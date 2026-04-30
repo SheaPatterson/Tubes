@@ -1,0 +1,37 @@
+{
+  "selectedTonestackIndex": 0,
+  "globalControlEnabled": true,
+  "globalControlValues": {
+    "RB": 0.31,
+    "RM": 0.32,
+    "RT": 0.61,
+    "RV": 0.5
+  },
+  "potDisplayRange": "D",
+  "potAuxDisplayMode": "v",
+  "responseSettings": {
+    "magnitude": true,
+    "phase": true,
+    "scope": false,
+    "scopeFrequency": 100
+  },
+  "tonestacks": [
+    {
+      "id": "drz",
+      "components": {
+        "RIN": "38k",
+        "RL": "1M",
+        "RT": {
+          "value": "1M",
+          "taper": "A",
+          "control": 0.5
+        },
+        "R1": "330k",
+        "R2": "330k",
+        "C1": "10n",
+        "C2": "120p",
+        "C3": "4.7n"
+      }
+    }
+  ]
+}

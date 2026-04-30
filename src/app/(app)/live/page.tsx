@@ -4,19 +4,20 @@ import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Radio, Volume2, Guitar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { ampModels } from "@/data/amp-models";
-import { fxPedals } from "@/data/fx-pedals";
+import { useAmpModels } from "@/hooks/use-amp-models";
+import { useFxPedals } from "@/hooks/use-fx-pedals";
+import { ampModels as staticAmpModels } from "@/data/amp-models";
 
 import type { AmpChannel, AmpModel, AmpParameters } from "@/types/amp";
 import type { SignalChainState } from "@/types/signal-chain";
 import type { SavedSignalChain } from "@/types/signal-chain";
-import type { FxPedalInstance } from "@/types/fx";
+import type { FxPedalDefinition, FxPedalInstance } from "@/types/fx";
 
 // ---------------------------------------------------------------------------
 // Defaults
 // ---------------------------------------------------------------------------
 
-const DEFAULT_AMP = ampModels[0];
+const DEFAULT_AMP = staticAmpModels[0];
 const QUICK_ACCESS_SLOT_COUNT = 8;
 
 function buildDefaultAmpParameters(model: AmpModel): AmpParameters {
@@ -71,19 +72,25 @@ function buildDefaultState(): SignalChainState {
 }
 
 // ---------------------------------------------------------------------------
-// Pedal definition lookup
+// Pedal definition lookup — built inside component via useMemo (see below)
 // ---------------------------------------------------------------------------
-
-const PEDAL_DEF_MAP: Record<string, (typeof fxPedals)[number]> = {};
-for (const p of fxPedals) {
-  PEDAL_DEF_MAP[p.id] = p;
-}
 
 // ---------------------------------------------------------------------------
 // Live Performance Page
 // ---------------------------------------------------------------------------
 
 export default function LivePerformancePage() {
+  const { data: ampModels } = useAmpModels();
+  const { data: fxPedals } = useFxPedals();
+
+  const pedalDefMap = useMemo(() => {
+    const map: Record<string, FxPedalDefinition> = {};
+    for (const p of fxPedals) {
+      map[p.id] = p;
+    }
+    return map;
+  }, [fxPedals]);
+
   const [state, setState] = useState<SignalChainState>(buildDefaultState);
   const [quickSlots, setQuickSlots] = useState<(SavedSignalChain | null)[]>(
     () => Array.from({ length: QUICK_ACCESS_SLOT_COUNT }, () => null),
@@ -92,8 +99,8 @@ export default function LivePerformancePage() {
   const lastUpdateRef = useRef(performance.now());
 
   const selectedAmp = useMemo(
-    () => ampModels.find((a) => a.id === state.amplifier.modelId) ?? DEFAULT_AMP,
-    [state.amplifier.modelId],
+    () => ampModels.find((a) => a.id === state.amplifier.modelId) ?? ampModels[0] ?? DEFAULT_AMP,
+    [state.amplifier.modelId, ampModels],
   );
 
   const activePedals = useMemo(() => {
@@ -190,6 +197,7 @@ export default function LivePerformancePage() {
       {/* Active FX Pedals */}
       <ActivePedalsGrid
         allPedals={[...state.preampFx, ...state.fxLoop]}
+        pedalDefMap={pedalDefMap}
         onToggle={handlePedalToggle}
       />
 
@@ -388,9 +396,11 @@ function MasterVolumeControl({
 
 function ActivePedalsGrid({
   allPedals,
+  pedalDefMap,
   onToggle,
 }: {
   allPedals: FxPedalInstance[];
+  pedalDefMap: Record<string, FxPedalDefinition>;
   onToggle: (instanceId: string) => void;
 }) {
   if (allPedals.length === 0) {
@@ -425,7 +435,7 @@ function ActivePedalsGrid({
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {allPedals.map((pedal) => {
-          const def = PEDAL_DEF_MAP[pedal.definitionId];
+          const def = pedalDefMap[pedal.definitionId];
           const name = def?.name ?? "Unknown";
           const brand = def?.brand ?? "";
           return (

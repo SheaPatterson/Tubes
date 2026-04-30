@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { ConvexClientProvider } from "@/components/providers/convex-client-provider"
+import { SignalChainProvider } from "@/components/providers/signal-chain-provider"
 import { ConnectivityIndicator } from "@/components/connectivity-indicator"
 import {
   Sidebar,
@@ -41,13 +42,15 @@ const profileItem = { label: "Profile", href: "/profile", icon: User }
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <ConvexClientProvider>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <TopNav />
-          <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
-        </SidebarInset>
-      </SidebarProvider>
+      <SignalChainProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <TopNav />
+            <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+          </SidebarInset>
+        </SidebarProvider>
+      </SignalChainProvider>
     </ConvexClientProvider>
   )
 }

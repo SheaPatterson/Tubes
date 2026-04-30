@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { ChevronDown, Guitar, Volume2, Mic } from "lucide-react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChevronDown, Guitar, Volume2, Mic, Power } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { AmpModelRenderer } from "@/components/amp/amp-model-renderer";
@@ -17,10 +17,10 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { useIsCompact } from "@/hooks/use-breakpoint";
-
-import { ampModels } from "@/data/amp-models";
-import { cabinets } from "@/data/cabinets";
-import { fxPedals } from "@/data/fx-pedals";
+import { useSignalChain } from "@/components/providers/signal-chain-provider";
+import { useAmpModels } from "@/hooks/use-amp-models";
+import { useCabinets } from "@/hooks/use-cabinets";
+import { useFxPedals } from "@/hooks/use-fx-pedals";
 
 import type { AmpChannel, AmpParameters } from "@/types/amp";
 import type { MicType, MicPreset } from "@/types/cabinet";
@@ -35,8 +35,14 @@ import type { FxPedalDefinition, FxPedalInstance } from "@/types/fx";
 // Defaults
 // ---------------------------------------------------------------------------
 
-const DEFAULT_AMP = ampModels[0];
-const DEFAULT_CABINET = cabinets[0];
+// Defaults are resolved inside the component after hooks run.
+// These module-level references are only used for the initial build
+// before the component mounts.
+import { ampModels as staticAmpModels } from "@/data/amp-models";
+import { cabinets as staticCabinets } from "@/data/cabinets";
+
+const DEFAULT_AMP = staticAmpModels[0];
+const DEFAULT_CABINET = staticCabinets[0];
 
 function buildDefaultAmpParameters(): AmpParameters {
   const params: Record<string, number> = {};
@@ -68,8 +74,8 @@ function buildDefaultState(): SignalChainState {
     inputSettings: {
       inputGain: 0.5,
       noiseGateEnabled: false,
-      noiseGateThreshold: 0.3,
-      noiseGateRelease: 0.1,
+      noiseGateThreshold: -60,
+      noiseGateRelease: 50,
     },
     preampFx: [],
     preampTubes: {
@@ -104,15 +110,13 @@ function buildDefaultState(): SignalChainState {
 // Pedal definition lookup
 // ---------------------------------------------------------------------------
 
-function buildPedalDefMap(): Record<string, FxPedalDefinition> {
+function buildPedalDefMap(pedals: FxPedalDefinition[]): Record<string, FxPedalDefinition> {
   const map: Record<string, FxPedalDefinition> = {};
-  for (const p of fxPedals) {
+  for (const p of pedals) {
     map[p.id] = p;
   }
   return map;
 }
-
-const PEDAL_DEF_MAP = buildPedalDefMap();
 
 // ---------------------------------------------------------------------------
 // Signal chain update helper — batches state updates synchronously so
@@ -129,18 +133,33 @@ function generateInstanceId(): string {
 // ---------------------------------------------------------------------------
 
 export default function SignalChainPage() {
+  const { data: ampModels } = useAmpModels();
+  const { data: cabinets } = useCabinets();
+  const { data: fxPedals } = useFxPedals();
+  const { isAudioRunning, isInitialized, error: audioError, startAudio, stopAudio, pushState } = useSignalChain();
+
   const [state, setState] = useState<SignalChainState>(buildDefaultState);
+
+  // Pedal definition map — rebuilt when pedal catalog changes
+  const PEDAL_DEF_MAP = useMemo(() => buildPedalDefMap(fxPedals), [fxPedals]);
 
   // Derived data
   const selectedAmp = useMemo(
-    () => ampModels.find((a) => a.id === state.amplifier.modelId) ?? DEFAULT_AMP,
-    [state.amplifier.modelId],
+    () => ampModels.find((a) => a.id === state.amplifier.modelId) ?? ampModels[0] ?? DEFAULT_AMP,
+    [state.amplifier.modelId, ampModels],
   );
 
   const selectedCabinet = useMemo(
-    () => cabinets.find((c) => c.id === state.cabinet.cabinetId) ?? DEFAULT_CABINET,
-    [state.cabinet.cabinetId],
+    () => cabinets.find((c) => c.id === state.cabinet.cabinetId) ?? cabinets[0] ?? DEFAULT_CABINET,
+    [state.cabinet.cabinetId, cabinets],
   );
+
+  // ── Bridge: push state to DSP layer on every change ──
+  useEffect(() => {
+    if (isInitialized) {
+      pushState(state);
+    }
+  }, [state, isInitialized, pushState]);
 
   // Track last update time for latency indicator
   const lastUpdateRef = useRef(performance.now());
@@ -205,7 +224,7 @@ export default function SignalChainPage() {
         handleAmpParameterChange(param, value);
       }
     },
-    [updateState, state.amplifier.parameters.toggles, selectedAmp.toggleSwitches, handleAmpParameterChange],
+    [updateState, selectedAmp.toggleSwitches, handleAmpParameterChange],
   );
 
   // ── Amp model selector ──
@@ -246,7 +265,7 @@ export default function SignalChainPage() {
         },
       }));
     },
-    [updateState],
+    [updateState, ampModels],
   );
 
   // ── Cabinet selector ──
@@ -421,7 +440,7 @@ export default function SignalChainPage() {
       ...prev,
       preampFx: [...prev.preampFx, instance],
     }));
-  }, [updateState, state.preampFx.length]);
+  }, [updateState, fxPedals, state.preampFx.length]);
 
   const handlePreampRemovePedal = useCallback(
     (pedalId: string) =>
@@ -489,7 +508,7 @@ export default function SignalChainPage() {
       ...prev,
       fxLoop: [...prev.fxLoop, instance],
     }));
-  }, [updateState, state.fxLoop.length]);
+  }, [updateState, fxPedals, state.fxLoop.length]);
 
   const handleFxLoopRemovePedal = useCallback(
     (pedalId: string) =>
@@ -507,6 +526,27 @@ export default function SignalChainPage() {
 
   return (
     <div className="signal-chain-layout pb-8">
+      {/* Audio engine control */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={isAudioRunning ? stopAudio : startAudio}
+          className={cn(
+            "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-colors min-h-[44px]",
+            isAudioRunning
+              ? "bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30"
+              : "bg-[var(--brand-accent)] text-white hover:bg-[var(--brand-accent-hover)]",
+          )}
+          aria-label={isAudioRunning ? "Stop audio engine" : "Start audio engine"}
+        >
+          <Power className="h-4 w-4" />
+          {isAudioRunning ? "Audio Running" : "Start Audio"}
+        </button>
+        {audioError && (
+          <span className="text-xs text-destructive">{audioError}</span>
+        )}
+      </div>
+
       {/* Signal chain flow indicator */}
       <SignalFlowHeader />
 
@@ -819,17 +859,17 @@ function InputSettingsPanel({
         <>
           <SliderControl
             value={settings.noiseGateThreshold}
-            min={0}
-            max={1}
-            label="Threshold"
+            min={-80}
+            max={0}
+            label="Threshold (dB)"
             orientation="horizontal"
             onChange={onGateThreshold}
           />
           <SliderControl
             value={settings.noiseGateRelease}
-            min={0}
-            max={1}
-            label="Release"
+            min={5}
+            max={500}
+            label="Release (ms)"
             orientation="horizontal"
             onChange={onGateRelease}
           />

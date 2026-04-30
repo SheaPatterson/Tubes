@@ -9,8 +9,10 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as catalog from "../catalog.js";
 import type * as midiMappings from "../midiMappings.js";
 import type * as realTimeState from "../realTimeState.js";
+import type * as seed from "../seed.js";
 import type * as signalChains from "../signalChains.js";
 import type * as subscriptions from "../subscriptions.js";
 import type * as userSettings from "../userSettings.js";
@@ -23,8 +25,10 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  catalog: typeof catalog;
   midiMappings: typeof midiMappings;
   realTimeState: typeof realTimeState;
+  seed: typeof seed;
   signalChains: typeof signalChains;
   subscriptions: typeof subscriptions;
   userSettings: typeof userSettings;

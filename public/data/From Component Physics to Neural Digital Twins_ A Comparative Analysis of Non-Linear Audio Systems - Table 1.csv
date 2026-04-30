@@ -1,0 +1,6 @@
+Feature,MN3007 (PMOS),MN3207 (NMOS)
+Supply Voltage,-10V to -15V,+4V to +10V
+Standard Application,High Voltage/Headroom,9V Standard Pedals
+S/N Ratio,80 dB (Typical),73 dB (Typical)
+THD,0.5% (at 0.78 Vrms),0.4% (at 0.25 Vrms)
+Clock Boundary,100 kHz,200 kHz

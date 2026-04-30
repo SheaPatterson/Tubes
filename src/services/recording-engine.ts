@@ -142,10 +142,14 @@ export function createRecordingEngine(sourceNode?: AudioNode): RecordingEngine {
     analyserNode.fftSize = WAVEFORM_FFT_SIZE;
     analyserNode.smoothingTimeConstant = 0.8;
 
-    mediaStreamDestination = ctx.createMediaStreamDestination();
+    if ('createMediaStreamDestination' in ctx) {
+      mediaStreamDestination = (ctx as AudioContext).createMediaStreamDestination();
+    }
 
     source.connect(analyserNode);
-    analyserNode.connect(mediaStreamDestination);
+    if (mediaStreamDestination) {
+      analyserNode.connect(mediaStreamDestination);
+    }
 
     waveformBuffer = new Float32Array(analyserNode.fftSize);
   }

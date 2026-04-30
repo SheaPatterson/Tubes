@@ -1,0 +1,13 @@
+Part Number,Number of Stages,Clock Generator Type,Supply Voltage (VDD),Maximum Input Signal Frequency,Total Harmonic Distortion (THD),Signal to Noise Ratio (S/N),Package Type,Source
+MN3001,Dual-512,External,-15 V,Not in source,0.4%,70 dB,14-Pin DIP,1
+MN3002,512,External,-15 V,Not in source,0.4%,70 dB,14-Pin DIP,1
+MN3003,Dual-64,Built-in,-9 V,12 kHz,0.5%,75 dB,14-Pin DIP,1
+MN3004,512,External,-15 V,10 kHz,0.4%,85 dB,14-Pin DIP,1
+MN3005,4096,External,-15 V,10 kHz,1%,75 dB,8-Pin DIP,1
+MN3006,128,External,-15 V,12 kHz,0.2%,90 dB,8-Pin DIP,1
+MN3007,1024,External,-15 V,12 kHz,0.5%,80 dB,8-Pin DIP,1
+MN3008,2048,External,-15 V,12 kHz,0.5%,78 dB,8-Pin DIP,1
+MN3009,256,External,-15 V,14 kHz,0.3%,88 dB,8-Pin DIP,1
+MN3010,Dual-512,External,-15 V,12 kHz,0.4%,85 dB,14-Pin DIP,1
+MN3011,3328 (6-Tap),External,-15 V,10 kHz,0.4%,76 dB,12-Pin DIP,1
+MN3012,"190, 3, 5 (3-Tap)",Built-in,-15 V,12 kHz,0.4%,76 dB,14-Pin DIP,1

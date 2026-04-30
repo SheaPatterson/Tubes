@@ -277,12 +277,222 @@ export const berlinWall: AmpModel = {
   },
 };
 
+// ── Chimera 30 (Vox AC30) ──
+export const chimera30: AmpModel = {
+  id: 'chimera-30',
+  name: 'Chimera 30',
+  originalBrand: 'Vox AC30',
+  brandRename: 'Chimera',
+  channels: ['clean', 'crunch'],
+  preampStageCount: 3,
+  powerAmpTubeType: 'EL84',
+  controls: makeControls({ preampGain: 5, bass: 5, middle: 5, treble: 6, tone: 7, volume: 5 }),
+  toggleSwitches: [
+    { name: 'Tone Shift', paramKey: 'toneShift', defaultValue: false, applicableToModel: false },
+    { name: 'Deep', paramKey: 'deep', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Boost', paramKey: 'midBoost', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Cut', paramKey: 'midCut', defaultValue: false, applicableToModel: false },
+    { name: 'Bright', paramKey: 'bright', defaultValue: true, applicableToModel: true },
+    { name: 'Diode', paramKey: 'diode', defaultValue: false, applicableToModel: false },
+  ],
+  visualConfig: {
+    panelColor: '#c4a265',
+    knobStyle: 'chicken-head',
+    fontFamily: 'serif',
+    logoSvgPath: '/icons/logo.svg',
+    layoutGrid: [
+      { paramKey: 'volume', x: 12, y: 50, size: 'md' },
+      { paramKey: 'bass', x: 27, y: 50, size: 'md' },
+      { paramKey: 'treble', x: 42, y: 50, size: 'md' },
+      { paramKey: 'tone', x: 57, y: 50, size: 'md' },
+      { paramKey: 'preampGain', x: 72, y: 50, size: 'lg' },
+      { paramKey: 'masterVolume', x: 88, y: 50, size: 'lg' },
+    ],
+  },
+};
+
+// ── Twanger Twin (Fender Twin Reverb) ──
+export const twangerTwin: AmpModel = {
+  id: 'twanger-twin',
+  name: 'Twanger Twin',
+  originalBrand: 'Fender Twin Reverb',
+  brandRename: 'Twanger',
+  channels: ['clean', 'crunch'],
+  preampStageCount: 4,
+  powerAmpTubeType: '6L6',
+  controls: makeControls({ preampGain: 3, bass: 5, middle: 5, treble: 6, tone: 5, volume: 4, presence: 5 }),
+  toggleSwitches: [
+    { name: 'Tone Shift', paramKey: 'toneShift', defaultValue: false, applicableToModel: false },
+    { name: 'Deep', paramKey: 'deep', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Boost', paramKey: 'midBoost', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Cut', paramKey: 'midCut', defaultValue: false, applicableToModel: false },
+    { name: 'Bright', paramKey: 'bright', defaultValue: true, applicableToModel: true },
+    { name: 'Diode', paramKey: 'diode', defaultValue: false, applicableToModel: false },
+  ],
+  visualConfig: {
+    panelColor: '#2a2a2a',
+    knobStyle: 'chicken-head',
+    fontFamily: 'serif',
+    logoSvgPath: '/icons/logo.svg',
+    layoutGrid: [
+      { paramKey: 'volume', x: 12, y: 50, size: 'md' },
+      { paramKey: 'bass', x: 25, y: 50, size: 'md' },
+      { paramKey: 'middle', x: 37, y: 50, size: 'md' },
+      { paramKey: 'treble', x: 49, y: 50, size: 'md' },
+      { paramKey: 'presence', x: 61, y: 50, size: 'md' },
+      { paramKey: 'masterVolume', x: 78, y: 50, size: 'lg' },
+    ],
+  },
+};
+
+// ── Twanger Deluxe (Fender Deluxe Reverb) ──
+export const twangerDeluxe: AmpModel = {
+  id: 'twanger-deluxe',
+  name: 'Twanger Deluxe',
+  originalBrand: 'Fender Deluxe Reverb',
+  brandRename: 'Twanger',
+  channels: ['clean', 'crunch'],
+  preampStageCount: 3,
+  powerAmpTubeType: '6L6',
+  controls: makeControls({ preampGain: 4, bass: 5, middle: 5, treble: 6, tone: 5, volume: 5 }),
+  toggleSwitches: [
+    { name: 'Tone Shift', paramKey: 'toneShift', defaultValue: false, applicableToModel: false },
+    { name: 'Deep', paramKey: 'deep', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Boost', paramKey: 'midBoost', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Cut', paramKey: 'midCut', defaultValue: false, applicableToModel: false },
+    { name: 'Bright', paramKey: 'bright', defaultValue: true, applicableToModel: true },
+    { name: 'Diode', paramKey: 'diode', defaultValue: false, applicableToModel: false },
+  ],
+  visualConfig: {
+    panelColor: '#1a1a1a',
+    knobStyle: 'chicken-head',
+    fontFamily: 'serif',
+    logoSvgPath: '/icons/logo.svg',
+    layoutGrid: [
+      { paramKey: 'volume', x: 15, y: 50, size: 'md' },
+      { paramKey: 'bass', x: 30, y: 50, size: 'md' },
+      { paramKey: 'treble', x: 45, y: 50, size: 'md' },
+      { paramKey: 'masterVolume', x: 65, y: 50, size: 'lg' },
+      { paramKey: 'presence', x: 82, y: 50, size: 'md' },
+    ],
+  },
+};
+
+// ── Soldano Overdrive Special (Soldano SLO-100) ──
+export const soldanoOverdrive: AmpModel = {
+  id: 'soldano-overdrive',
+  name: 'Soldano Overdrive',
+  originalBrand: 'Soldano SLO-100',
+  brandRename: 'Soldano',
+  channels: ['clean', 'crunch', 'overdrive'],
+  preampStageCount: 5,
+  powerAmpTubeType: 'EL34',
+  controls: makeControls({ preampGain: 7, bass: 5, middle: 6, treble: 6, presence: 6, masterVolume: 4 }),
+  toggleSwitches: [
+    { name: 'Tone Shift', paramKey: 'toneShift', defaultValue: false, applicableToModel: false },
+    { name: 'Deep', paramKey: 'deep', defaultValue: true, applicableToModel: true },
+    { name: 'Mid Boost', paramKey: 'midBoost', defaultValue: false, applicableToModel: true },
+    { name: 'Mid Cut', paramKey: 'midCut', defaultValue: false, applicableToModel: false },
+    { name: 'Bright', paramKey: 'bright', defaultValue: true, applicableToModel: true },
+    { name: 'Diode', paramKey: 'diode', defaultValue: false, applicableToModel: false },
+  ],
+  visualConfig: {
+    panelColor: '#4a0e0e',
+    knobStyle: 'dome',
+    fontFamily: 'sans-serif',
+    logoSvgPath: '/icons/logo.svg',
+    layoutGrid: [
+      { paramKey: 'preampGain', x: 10, y: 50, size: 'lg' },
+      { paramKey: 'bass', x: 25, y: 50, size: 'md' },
+      { paramKey: 'middle', x: 37, y: 50, size: 'md' },
+      { paramKey: 'treble', x: 49, y: 50, size: 'md' },
+      { paramKey: 'presence', x: 61, y: 50, size: 'md' },
+      { paramKey: 'volume', x: 73, y: 50, size: 'md' },
+      { paramKey: 'masterVolume', x: 88, y: 50, size: 'lg' },
+    ],
+  },
+};
+
+// ── Hiwatt Custom (Hiwatt DR103) ──
+export const hiwattCustom: AmpModel = {
+  id: 'hiwatt-custom',
+  name: 'Hiwatt Custom',
+  originalBrand: 'Hiwatt DR103',
+  brandRename: 'Hiwatt',
+  channels: ['clean', 'crunch'],
+  preampStageCount: 4,
+  powerAmpTubeType: 'EL34',
+  controls: makeControls({ preampGain: 5, bass: 5, middle: 6, treble: 5, presence: 5, masterVolume: 5 }),
+  toggleSwitches: [
+    { name: 'Tone Shift', paramKey: 'toneShift', defaultValue: false, applicableToModel: false },
+    { name: 'Deep', paramKey: 'deep', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Boost', paramKey: 'midBoost', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Cut', paramKey: 'midCut', defaultValue: false, applicableToModel: false },
+    { name: 'Bright', paramKey: 'bright', defaultValue: true, applicableToModel: true },
+    { name: 'Diode', paramKey: 'diode', defaultValue: false, applicableToModel: false },
+  ],
+  visualConfig: {
+    panelColor: '#1e3a5f',
+    knobStyle: 'chicken-head',
+    fontFamily: 'sans-serif',
+    logoSvgPath: '/icons/logo.svg',
+    layoutGrid: [
+      { paramKey: 'volume', x: 12, y: 50, size: 'md' },
+      { paramKey: 'bass', x: 27, y: 50, size: 'md' },
+      { paramKey: 'middle', x: 42, y: 50, size: 'md' },
+      { paramKey: 'treble', x: 57, y: 50, size: 'md' },
+      { paramKey: 'presence', x: 72, y: 50, size: 'md' },
+      { paramKey: 'masterVolume', x: 88, y: 50, size: 'lg' },
+    ],
+  },
+};
+
+// ── Matchless Lightning (Matchless DC-30) ──
+export const matchlessLightning: AmpModel = {
+  id: 'matchless-lightning',
+  name: 'Matchless Lightning',
+  originalBrand: 'Matchless DC-30',
+  brandRename: 'Matchless',
+  channels: ['clean', 'crunch'],
+  preampStageCount: 3,
+  powerAmpTubeType: 'EL84',
+  controls: makeControls({ preampGain: 5, bass: 5, middle: 5, treble: 6, tone: 6, volume: 5 }),
+  toggleSwitches: [
+    { name: 'Tone Shift', paramKey: 'toneShift', defaultValue: false, applicableToModel: false },
+    { name: 'Deep', paramKey: 'deep', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Boost', paramKey: 'midBoost', defaultValue: false, applicableToModel: false },
+    { name: 'Mid Cut', paramKey: 'midCut', defaultValue: false, applicableToModel: true },
+    { name: 'Bright', paramKey: 'bright', defaultValue: true, applicableToModel: true },
+    { name: 'Diode', paramKey: 'diode', defaultValue: false, applicableToModel: false },
+  ],
+  visualConfig: {
+    panelColor: '#3d2b1f',
+    knobStyle: 'chicken-head',
+    fontFamily: 'serif',
+    logoSvgPath: '/icons/logo.svg',
+    layoutGrid: [
+      { paramKey: 'volume', x: 12, y: 50, size: 'md' },
+      { paramKey: 'bass', x: 27, y: 50, size: 'md' },
+      { paramKey: 'treble', x: 42, y: 50, size: 'md' },
+      { paramKey: 'tone', x: 57, y: 50, size: 'md' },
+      { paramKey: 'preampGain', x: 72, y: 50, size: 'lg' },
+      { paramKey: 'masterVolume', x: 88, y: 50, size: 'lg' },
+    ],
+  },
+};
+
 export const ampModels: AmpModel[] = [
   winstonCHL,
   usSteelPlate,
   twangerBanger,
+  twangerTwin,
+  twangerDeluxe,
   fizzle0505,
   fuzzyAcidTrip,
   blitzkriegWarfare,
   berlinWall,
+  chimera30,
+  soldanoOverdrive,
+  hiwattCustom,
+  matchlessLightning,
 ];

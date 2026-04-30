@@ -33,6 +33,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  eslint: {
+    // ESLint v10 has a known circular reference issue with eslint-config-next.
+    // Lint separately via `pnpm lint` instead of during build.
+    ignoreDuringBuilds: true,
+  },
   async headers() {
     return [
       {

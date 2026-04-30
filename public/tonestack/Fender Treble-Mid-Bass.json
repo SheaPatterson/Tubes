@@ -1,0 +1,45 @@
+{
+  "selectedTonestackIndex": 0,
+  "globalControlEnabled": true,
+  "globalControlValues": {
+    "RB": 0.31,
+    "RM": 0.32,
+    "RT": 0.61
+  },
+  "potDisplayRange": "D",
+  "potAuxDisplayMode": "v",
+  "responseSettings": {
+    "magnitude": true,
+    "phase": true,
+    "scope": false,
+    "scopeFrequency": 100
+  },
+  "tonestacks": [
+    {
+      "id": "ftmb",
+      "components": {
+        "RIN": "38k",
+        "RL": "1M",
+        "RB": {
+          "value": "250k",
+          "taper": "A",
+          "control": 0.5
+        },
+        "RM": {
+          "value": "10k",
+          "taper": "L",
+          "control": 0.5
+        },
+        "RT": {
+          "value": "250k",
+          "taper": "A",
+          "control": 0.5
+        },
+        "R1": "100k",
+        "C1": "250p",
+        "C2": "100n",
+        "C3": "47n"
+      }
+    }
+  ]
+}
